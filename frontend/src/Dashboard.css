@@ -1,0 +1,49 @@
+.dashboard {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.league-details {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.squad-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.squad-table th, .squad-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.squad-table th {
+    background-color: #333;
+    color: #fff;
+}
+
+.squad-row:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.squad-row:nth-child(odd) {
+    background-color: #fff;
+}
+
+.positive {
+    color: green;
+}
+
+.negative {
+    color: red;
+}
+
+.squad-row td {
+    font-size: 0.9rem;
+}
