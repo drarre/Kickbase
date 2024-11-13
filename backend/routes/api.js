@@ -9,7 +9,6 @@ router.post('/login', async (req, res) => {
   const { em, pass } = req.body;
   try {
     const loginResponse = await login(em, pass);
-    console.log("Backend login response:", loginResponse); // Log the backend response
     res.status(200).json({
       token: loginResponse.tkn,
       tokenExpiry: loginResponse.tknex
