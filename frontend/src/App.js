@@ -1,25 +1,16 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Login';
-import Dashboard from './Dasboard';
+import Dashboard from './Dashboard';
 
-function App() {
-  // Simulating authentication by checking if a token is in localStorage
-  const isAuthenticated = localStorage.getItem('authToken');
-
+const App = () => {
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route
-            path="/dashboard"
-            element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />}
-          />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
     </Router>
   );
-}
+};
 
 export default App;
