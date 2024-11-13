@@ -1,35 +1,30 @@
+/* Centering the content in the dashboard */
 .dashboard {
-    font-family: Arial, sans-serif;
-    color: #333;
+    padding: 30px;
+    background-color: #f9f9f9;
 }
 
+/* Styling for the league details card */
 .league-details {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #f4f4f4;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    background-color: #e9f7ef;
+    border-radius: 8px;
+    border: 1px solid #d3d3d3;
 }
 
-.squad-table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-}
-
+/* Table styling for squad */
 .squad-table th, .squad-table td {
-    padding: 10px;
+    padding: 15px;
     text-align: center;
     border: 1px solid #ddd;
 }
 
 .squad-table th {
-    background-color: #333;
+    background-color: #2d3e50;
     color: #fff;
 }
 
 .squad-row:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #f4f4f4;
 }
 
 .squad-row:nth-child(odd) {
@@ -46,4 +41,65 @@
 
 .squad-row td {
     font-size: 0.9rem;
+}
+
+/* Custom button styling */
+.btn {
+    margin-top: 10px;
+}
+
+/* Custom number formatting for positive and negative */
+.positive {
+    color: green;
+    font-weight: bold;
+}
+
+.negative {
+    color: red;
+    font-weight: bold;
+}
+
+.negative {
+    font-size: 1.2rem;
+}
+/* Custom number formatting for positive and negative changes */
+.positive {
+    color: green !important;  /* Force green for positive */
+    font-weight: bold;
+}
+
+.negative {
+    color: red !important;    /* Force red for negative */
+    font-weight: bold;
+}
+
+/* General styles */
+.squad-table th, .squad-table td {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.squad-table th {
+    background-color: #2d3e50;
+    color: #fff;
+}
+
+.squad-row:nth-child(even) {
+    background-color: #f4f4f4;
+}
+
+.squad-row:nth-child(odd) {
+    background-color: #fff;
+}
+
+.squad-table th, .squad-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.squad-table th {
+    background-color: #333;
+    color: white;
 }

@@ -3,6 +3,8 @@ const router = express.Router();
 const { fetchLeagues } = require('../service/leagueService');
 const { fetchSquad } = require('../service/squadService');
 const { login } = require('../service/loginService');
+const { getPlayersToSell } = require('../service/playerSelectionService');
+
 
 // Route for login
 router.post('/login', async (req, res) => {
@@ -41,4 +43,20 @@ router.get('/squads/:league_id', async (req, res) => {
   }
 });
 
+
+router.post('/sell-players', (req, res) => {
+    console.log('Received /sell-players request');
+    console.log('Request body:', req.body); // Log the incoming request body
+
+    const { players, balance, excludedPlayers } = req.body;
+
+    const result = getPlayersToSell(players, balance, excludedPlayers);
+
+    if (result.error) {
+        console.log('Error in getPlayersToSell:', result.error); // Log error if any
+        return res.status(400).json({ error: result.error });
+    }
+
+    return res.status(200).json({ playersToSell: result.playersToSell });
+});
 module.exports = router;
