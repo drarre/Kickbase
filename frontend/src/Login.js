@@ -21,14 +21,20 @@ const Login = () => {
             });
 
             if (response.data && response.data.token) {
+                // Store the auth token and expiry in localStorage
                 localStorage.setItem('authToken', response.data.token);
                 localStorage.setItem('tokenExpiry', response.data.tokenExpiry);
+
+                // Navigate to the dashboard
                 navigate('/dashboard');
             } else {
+                // Show an error if the response doesn't contain a token
                 setError('Login failed. Please check your credentials.');
             }
         } catch (err) {
+            // Handle errors that occur during the request
             setError('An error occurred. Please try again.');
+            console.error(err);
         }
     };
 

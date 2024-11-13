@@ -2,13 +2,12 @@ const axios = require('axios');
 require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
 const User = require('../models/User');
 
+// These will be set dynamically
 let authToken = null;
 let authTokenExpiry = null;
 const api_url = process.env.API_URL;
-const email = process.env.EMAIL;
-const password = process.env.PASSWORD;
 
-async function login() {
+async function login(email, password) {
     try {
         const response = await axios.post(`${api_url}/user/login`, {
             loy: false,
@@ -55,7 +54,7 @@ async function ensureAuthenticated() {
     const now = new Date();
     if (!authToken || now >= authTokenExpiry) {
         console.log('Auth token missing or expired, logging in...'); // Log when re-authentication is triggered
-        await login();
+        await login(email, password); // Default fallback to .env values
     } else {
         console.log('Auth token still valid:', authToken); // Log when token is still valid
     }
