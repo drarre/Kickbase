@@ -1,0 +1,258 @@
+{
+	"info": {
+		"_postman_id": "41234afa-0de1-4331-9bc0-566f1febcad4",
+		"name": "Kickbase_neu",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33714050"
+	},
+	"item": [
+		{
+			"name": "user/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"loy\": false,\n    \"ext\":true,\n    \"em\": \"{{email}}\",\n    \"rep\":{},\n    \"pass\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/user/login",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/leagues/selection",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "/leagues/{{league_id}}/me",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "/leagues/{{league_id}}/me",
+					"path": [
+						"leagues",
+						"{{league_id}}",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/leagues/{{league_id))/squad",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "/leagues/{{league_id}}/market",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "/competitions/1/table",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/competitions/1/table",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"competitions",
+						"1",
+						"table"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/competitions/{{competition_id}}/teams/{{team_id}}/teamprofile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/competitions/3/teams/{{team_id}}/teamprofile",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"competitions",
+						"3",
+						"teams",
+						"{{team_id}}",
+						"teamprofile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "competitions/{{competition_id}}/players/{{player_id}}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/competitions/3/players/{{player_id}}",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"competitions",
+						"3",
+						"players",
+						"{{player_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/competitions/{{competition_id}}/players/{{player_id}}/league_id={{league_id}}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/competitions/{{competition_id}}/players/{{player_id}}?league_id={{league_id}}",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"competitions",
+						"{{competition_id}}",
+						"players",
+						"{{player_id}}"
+					],
+					"query": [
+						{
+							"key": "league_id",
+							"value": "{{league_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "competitions/{{competition_id}}/players/{{player_id|/performance?league_id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/competitions/{{competition_id}}/players/{{player_id}}/performance?leagueId={{league_id}}",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"competitions",
+						"{{competition_id}}",
+						"players",
+						"{{player_id}}",
+						"performance"
+					],
+					"query": [
+						{
+							"key": "leagueId",
+							"value": "{{league_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Marketvalue 3M",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/competitions/{{competition_id}}/players/{{player_id}}/marketValue/92?leagueId={{league_id}}",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"competitions",
+						"{{competition_id}}",
+						"players",
+						"{{player_id}}",
+						"marketValue",
+						"92"
+					],
+					"query": [
+						{
+							"key": "leagueId",
+							"value": "{{league_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Marketvalue 1y",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/competitions/{{competition_id}}/players/{{player_id}}/marketValue/365?leagueId={{league_id}}",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"competitions",
+						"{{competition_id}}",
+						"players",
+						"{{player_id}}",
+						"marketValue",
+						"365"
+					],
+					"query": [
+						{
+							"key": "leagueId",
+							"value": "{{league_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
