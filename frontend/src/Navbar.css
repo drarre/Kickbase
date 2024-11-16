@@ -1,0 +1,31 @@
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #343a40;
+}
+
+.navbar .nav {
+    display: flex;
+    justify-content: flex-start; 
+    width: 100%;
+}
+
+.navbar .nav-link {
+    color: white;
+    margin-right: 15px; 
+}
+
+.navbar .btn-outline-light {
+    margin-left: 15px;
+}
+
+.navbar .nav-link:hover, .navbar .btn-outline-light:hover {
+    color: #007bff; 
+}
+
+.navbar-brand {
+    display: none; 
+}
