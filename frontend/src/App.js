@@ -1,27 +1,25 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Login from './Login';
-import Dashboard from './Dashboard';
-import SellPlayers from './SellPlayers';
-import Navigation from './Navbar';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container } from 'react-bootstrap';
+import { Routes, Route, useLocation } from 'react-router-dom'; // React Router for routing
+import Login from './Login';      // Import Login page
+import Dashboard from './Dashboard'; // Import Dashboard page
+import SellPlayers from './SellPlayers'; // Import SellPlayers page
+import Navigation from './Navbar'; // Import Navigation (Navbar) component
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap styles
+import { Container } from 'react-bootstrap'; // Container for Bootstrap layout
 
 const App = () => {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <AppContent />
   );
 };
 
-// AppContent is where the location check happens
+// AppContent manages what components should be shown
 const AppContent = () => {
   const location = useLocation(); // Get the current location (path)
 
   return (
     <>
-      {/* Only show Navigation if we're NOT on the login page */}
+      {/* Only show Navigation if we are NOT on the login page */}
       {location.pathname !== '/' && <Navigation />}
       
       <Container className="mt-4">
