@@ -18,11 +18,29 @@ router.post('/login', async (req, res) => {
     const loginResponse = await login(em, pass);
     res.status(200).json({
       token: loginResponse.tkn,
-      tokenExpiry: loginResponse.tknex
+      tokenExpiry: loginResponse.tknex,
+      refreshToken: loginResponse.rtkn,
     });
   } catch (error) {
     console.error("Error in backend login route:", error);
     res.status(500).json({ error: 'Failed to login' });
+  }
+});
+
+router.post('/refresh-token', async (req, res) => {
+  const { refreshToken } = req.body;
+  try {
+    const response = await axios.post(`${api_url}/user/refresh-token`, {
+      rtkn: refreshToken,
+    });
+
+    res.status(200).json({
+      token: response.data.tkn,
+      tokenExpiry: response.data.tknex,
+    });
+  } catch (error) {
+    console.error("Error in refreshing token:", error);
+    res.status(401).json({ error: 'Failed to refresh token' });
   }
 });
 

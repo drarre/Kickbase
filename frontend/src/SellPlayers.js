@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './SellPlayers.css';
 import { Dropdown, DropdownButton, Card, Button } from 'react-bootstrap';
 import Select from 'react-select';
+import apiClient from './api/apiClient';
 
 const api_url = process.env.REACT_APP_API_URL;
 
@@ -20,7 +20,7 @@ function Dashboard() {
     useEffect(() => {
         const fetchLeagues = async () => {
             try {
-                const response = await axios.get(`${api_url}/api/leagues`);
+                const response = await apiClient.get(`${api_url}/api/leagues`);
                 setLeagues(Array.isArray(response.data.it.it) ? response.data.it.it : []);
             } catch (error) {
                 console.error('Failed to fetch leagues:', error);
@@ -32,7 +32,7 @@ function Dashboard() {
 
     const fetchSquad = async (leagueId) => {
         try {
-            const response = await axios.get(`${api_url}/api/squads/${leagueId}`);
+            const response = await apiClient.get(`${api_url}/api/squads/${leagueId}`);
             const squadData = Array.isArray(response.data.it) ? response.data.it : [];
             setSquad(squadData);
             const dailyChangeSum = squadData.reduce((sum, player) => sum + (player.tfhmvt || 0), 0);
@@ -91,7 +91,7 @@ function Dashboard() {
     const handleSellPlayers = async () => {
         const excludedPlayerIds = selectedPlayers.map(player => player.value);
         try {
-            const response = await axios.post(`${api_url}/api/sell-players`, {
+            const response = await apiClient.post(`${api_url}/api/sell-players`, {
                 players: squad,
                 balance: balance,
                 excludedPlayers: excludedPlayerIds,
@@ -180,7 +180,7 @@ function Dashboard() {
             )}
 
             {/* Button to fetch players to sell */}
-            <Button variant="warning" onClick={handleSellPlayers}>Calculate Players to Sell</Button>
+            <Button className='sell-players-button' onClick={handleSellPlayers}>Calculate Players to Sell</Button>
 
             {/* Display Players to Sell as Cards */}
             {playersToSell.length > 0 && (

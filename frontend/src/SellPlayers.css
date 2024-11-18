@@ -180,3 +180,13 @@ div[class*="control"]:focus-within {
     border-color: beige !important; /* Beige border when focused */
     color: beige !important; /* Ensure text stays beige */
 }
+.sell-players-button {
+    background-color: #d2b48c !important; /* Ensure background color is applied */
+    color: black !important; /* Ensure text color is applied */
+    border: none !important; /* Remove any border */
+}
+
+.sell-players-button:hover {
+    background-color: beige !important; /* Optional: Add a hover effect */
+    color: black !important; /* Ensure text color remains black on hover */
+}

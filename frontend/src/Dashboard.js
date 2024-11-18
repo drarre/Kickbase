@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './Dashboard.css'; // Include a CSS file for custom styling
 import { Dropdown, DropdownButton, Card, Row, Col } from 'react-bootstrap'; 
+import apiClient from './api/apiClient';
 
 const api_url = process.env.REACT_APP_API_URL;
 
@@ -19,7 +19,7 @@ function Dashboard() {
     useEffect(() => {
         const fetchLeagues = async () => {
             try {
-                const response = await axios.get(`${api_url}/api/leagues`);
+                const response = await apiClient.get(`${api_url}/api/leagues`);
                 setLeagues(Array.isArray(response.data.it.it) ? response.data.it.it : []);
             } catch (error) {
                 console.error('Failed to fetch leagues:', error);
@@ -32,7 +32,7 @@ function Dashboard() {
     // Fetch squad details based on selected league
     const fetchSquad = async (leagueId) => {
         try {
-            const response = await axios.get(`${api_url}/api/squads/${leagueId}`);
+            const response = await apiClient.get(`${api_url}/api/squads/${leagueId}`);
             const squadData = Array.isArray(response.data.it) ? response.data.it : [];
             setSquad(squadData);
             const dailyChangeSum = squadData.reduce((sum, player) => sum + (player.tfhmvt || 0), 0);

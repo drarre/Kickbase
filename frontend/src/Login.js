@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Login.css'; // Import the new CSS for styling
+import apiClient from './api/apiClient';
 
 const api_url = process.env.REACT_APP_API_URL;
 
@@ -15,7 +15,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`${api_url}/api/login`, { 
+            const response = await apiClient.post(`${api_url}/api/login`, { 
                 em: email, 
                 pass: password 
             });
