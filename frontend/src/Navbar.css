@@ -1,31 +1,52 @@
-
+/* Navbar Styling */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #343a40;
+    background-color: #000000; /* Match the black background of the page */
+    border-bottom: 1px solid beige; /* Optional: Add a beige border for distinction */
 }
 
+/* Nav Links Styling */
 .navbar .nav {
     display: flex;
-    justify-content: flex-start; 
+    justify-content: flex-start;
     width: 100%;
 }
 
 .navbar .nav-link {
-    color: white;
-    margin-right: 15px; 
+    color: beige !important; /* Beige text for links */
+    margin-right: 15px;
+    text-decoration: none;
+    font-size: 16px; /* Adjust font size for better readability */
 }
 
+.navbar .nav-link:hover {
+    color: #f0ad4e !important; /* Golden hover effect for links */
+}
+
+/* Button Styling */
 .navbar .btn-outline-light {
     margin-left: 15px;
+    color: beige !important; /* Beige text for buttons */
+    border-color: beige !important; /* Beige border */
 }
 
-.navbar .nav-link:hover, .navbar .btn-outline-light:hover {
-    color: #007bff; 
+.navbar .btn-outline-light:hover {
+    background-color: #444444 !important; /* Dark grey background on hover */
+    color: beige !important; /* Keep text beige */
+    border-color: #f0ad4e !important; /* Golden border on hover */
 }
 
+/* Navbar Brand */
 .navbar-brand {
-    display: none; 
+    color: beige !important; /* Beige text for the brand */
+    font-size: 20px; /* Make the brand text more prominent */
+    display: block !important; /* Ensure the brand is visible */
+    font-weight: bold; /* Emphasize the brand */
+}
+
+.navbar-brand:hover {
+    color: #f0ad4e !important; /* Golden hover effect for the brand */
 }

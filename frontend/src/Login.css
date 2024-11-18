@@ -4,24 +4,25 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f4f4f9;
+    background-color: black;
 }
 
 /* Box around the form */
 .login-box {
     width: 350px;
     padding: 30px;
-    background-color: #fff;
+    background-color: beige;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+    color: black !important;
 }
 
 /* Heading styling */
 .login-box h2 {
     font-size: 24px;
     margin-bottom: 20px;
-    color: #333;
+    color: black;
 }
 
 /* Input fields container */
@@ -35,7 +36,7 @@
     display: block;
     font-size: 14px;
     margin-bottom: 5px;
-    color: #666;
+    color: black;
 }
 
 /* Input field styling */
@@ -45,12 +46,12 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
-    color: #333;
+    background-color: white;
 }
 
 /* Focused input field */
 .input-field:focus {
-    border-color: #4CAF50;
+    border-color: black;
     outline: none;
 }
 
@@ -65,9 +66,9 @@
 .login-btn {
     width: 100%;
     padding: 12px;
-    background-color: #4CAF50;
+    background-color: gray;
     color: white;
-    border: none;
+    border: black 5px;
     border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
@@ -75,5 +76,5 @@
 }
 
 .login-btn:hover {
-    background-color: #45a049;
+    background-color: darkgray;
 }

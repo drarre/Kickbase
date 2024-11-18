@@ -1,0 +1,182 @@
+/* General Body Styling */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black !important; /* Black background */
+    color: beige !important; /* beige text color */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dashboard Container */
+.dashboard {
+    padding: 20px;
+    background-color: black; /* Ensure dashboard background is black */
+}
+
+/* Positive and Negative Number Styling */
+.positive {
+    color: rgb(115, 217, 115) !important; /* Green for positive values */
+}
+
+.negative {
+    color: rgb(228, 102, 102) !important; /* Red for negative values */
+}
+
+/* Card Styling */
+.card {
+    background-color: #000 !important; /* Dark background for cards */
+    color: beige !important; /* beige text color for cards */
+    border: 1px solid beige; /* beige border */
+    border-radius: 8px; /* Rounded corners for cards */
+}
+
+.card-title, .card-subtitle, .card p {
+    color: beige !important; /* Ensure text inside cards is beige */
+    text-align: center; /* Center-align card text */
+}
+
+/* Dropdown Styling for League Selector */
+.dropdown-menu {
+    background-color: black !important; /* Black background for dropdown */
+    color: beige !important; /* beige text for dropdown items */
+    border: 1px solid beige; /* beige border for dropdown */
+}
+
+.dropdown-item {
+    color: beige !important; /* beige text color for dropdown items */
+}
+
+.dropdown-item:hover {
+    background-color: #333 !important; /* Slightly lighter black on hover */
+    color: beige !important; /* beige text remains on hover */
+}
+
+.dropdown-toggle {
+    background-color: black !important; /* Black background for dropdown button */
+    color: beige !important; /* beige text for dropdown button */
+    border: 1px solid beige !important; /* beige border */
+}
+
+.dropdown-toggle:hover {
+    background-color: #444 !important; /* Darker black on hover */
+    color: beige !important; /* beige text on hover */
+}
+
+/* React-Select Styling for Excluding Players Dropdown */
+div[class*="menu"] {
+    background-color: black !important; /* Black background for the dropdown menu */
+    color: beige !important; /* Beige text color for dropdown options */
+}
+
+div[class*="option"] {
+    background-color: black !important; /* Black background for options */
+    color: beige !important; /* Beige text for options */
+    cursor: pointer;
+}
+
+div[class*="option"]:hover {
+    background-color: #333 !important; /* Slightly lighter black on hover */
+    color: beige !important; /* Ensure text remains beige */
+}
+
+div[class*="option"].is-focused {
+    background-color: #444 !important; /* Dark grey for focused items */
+    color: beige !important;
+}
+
+div[class*="option"].is-selected {
+    background-color: #222 !important; /* Slightly darker grey for selected items */
+    color: beige !important;
+}
+
+div[class*="control"] {
+    background-color: black !important; /* Black background for the input */
+    border: 1px solid beige !important; /* Beige border for the input */
+    color: beige !important; /* Beige text */
+}
+
+div[class*="control"] .css-1wa3eu0-placeholder, 
+.css-1s2u09g-placeholder {
+    color: beige !important; /* Beige text for placeholder */
+}
+
+div[class*="indicatorContainer"] {
+    color: beige !important; /* Dropdown arrow icon in beige */
+}
+
+div[class*="indicatorSeparator"] {
+    background-color: beige !important; /* Beige separator line */
+}
+
+/* Player Card Styling */
+.player-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.player-card {
+    width: 150px;
+    text-align: center;
+}
+
+.combination-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .card-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* General Styling for Input Box */
+div[class*="control"] {
+    background-color: black !important; /* Black background for the input */
+    border: 1px solid beige !important; /* Beige border */
+    color: beige !important; /* Beige text */
+}
+
+/* Input Text Styling */
+div[class*="control"] input {
+    color: beige !important; /* Ensure input text is beige */
+    background-color: black !important; /* Match the input box background */
+    caret-color: beige !important; /* Beige caret (text cursor) */
+}
+
+/* Placeholder Text */
+div[class*="control"] .css-1wa3eu0-placeholder, 
+.css-1s2u09g-placeholder {
+    color: beige !important; /* Beige text for placeholder */
+}
+
+/* Hover and Focus States */
+div[class*="control"]:hover {
+    background-color: #222 !important; /* Slightly darker background on hover */
+    color: beige !important; /* Text remains beige */
+}
+
+div[class*="control"]:focus-within {
+    background-color: black !important; /* Black background when focused */
+    border-color: beige !important; /* Beige border when focused */
+    color: beige !important; /* Ensure text stays beige */
+}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Dashboard.css';
-import { Dropdown, DropdownButton, Card, Table, Button } from 'react-bootstrap';
+import './SellPlayers.css';
+import { Dropdown, DropdownButton, Card, Button } from 'react-bootstrap';
 import Select from 'react-select';
 
 const api_url = process.env.REACT_APP_API_URL;
@@ -33,7 +33,7 @@ function Dashboard() {
     const fetchSquad = async (leagueId) => {
         try {
             const response = await axios.get(`${api_url}/api/squads/${leagueId}`);
-            const squadData = Array.isArray(response.data.it.it) ? response.data.it.it : [];
+            const squadData = Array.isArray(response.data.it) ? response.data.it : [];
             setSquad(squadData);
             const dailyChangeSum = squadData.reduce((sum, player) => sum + (player.tfhmvt || 0), 0);
             setDailyChange(dailyChangeSum);
@@ -48,6 +48,8 @@ function Dashboard() {
             setSelectedLeague(leagueId);
             setBalance(league.b);
             setTotalValue(league.tv);
+            setSelectedPlayers([]); // Clear selected players
+            setPlayersToSell([]); // Clear players to sell
             fetchSquad(leagueId);
         }
     };
@@ -72,7 +74,7 @@ function Dashboard() {
     };
 
     const handlePlayerSelect = (selectedOption) => {
-        if (selectedOption) {
+        if (selectedOption && !selectedPlayers.some(player => player.value === selectedOption.value)) {
             setSelectedPlayers(prevPlayers => [...prevPlayers, selectedOption]);
         }
     };
@@ -92,13 +94,17 @@ function Dashboard() {
             const response = await axios.post(`${api_url}/api/sell-players`, {
                 players: squad,
                 balance: balance,
-                excludedPlayers: excludedPlayerIds
+                excludedPlayers: excludedPlayerIds,
             });
 
             if (response.data && response.data.playersToSell) {
                 setPlayersToSell(response.data.playersToSell);
+            } else if (response.data.error) {
+                alert(response.data.error); // Display error returned from backend
+                setPlayersToSell([]);
             } else {
                 console.log('No players to sell:', response.data);
+                setPlayersToSell([]);
             }
         } catch (error) {
             console.error('Error fetching players to sell:', error);
@@ -128,12 +134,13 @@ function Dashboard() {
             </div>
 
             {/* Player Selection Search Bar */}
-            <div className="mb-3">
+            <div className=" mb-3" >
                 <Select
+                    className='excluding-players-select'
                     options={playerOptions}
                     onChange={handlePlayerSelect}
                     isClearable
-                    placeholder="Search for players..."
+                    placeholder="Choose players to exclude"
                 />
             </div>
 
@@ -175,37 +182,29 @@ function Dashboard() {
             {/* Button to fetch players to sell */}
             <Button variant="warning" onClick={handleSellPlayers}>Calculate Players to Sell</Button>
 
+            {/* Display Players to Sell as Cards */}
             {playersToSell.length > 0 && (
                 <div className="players-to-sell mt-4">
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>Players to Sell</Card.Title>
-                            <Table striped bordered hover responsive>
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Market Value</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {playersToSell.map((combination, index) => (
-                                        <tr key={index}>
-                                            <td>
-                                                {/* Map through the combo array and get player names */}
-                                                {combination.combo.map(player => player.n).join(', ')}
-                                            </td>
-                                            <td>
-                                                {/* Map through the combo array and get player positions */}
-                                                {combination.combo.map(player => getPositionName(player.pos)).join(', ')}
-                                            </td>
-                                            <td>{combination.totalMarketValue}</td>
-                                        </tr>
+                    <h3>Players to Sell</h3>
+                    <div className="player-card-container">
+                        {playersToSell.map((combination, index) => (
+                            <div key={index} className="combination-card mb-4">
+                                <h5>Combination {index + 1}</h5>
+                                <div className="card-grid">
+                                    {combination.combo.map(player => (
+                                        <Card key={player.i} className="player-card">
+                                            <Card.Img variant="top" src={player.imageUrl} alt={player.n} />
+                                            <Card.Body>
+                                                <Card.Title>{player.n}</Card.Title>
+                                                <p>Market Value: {formatNumber(player.mv)}</p>
+                                            </Card.Body>
+                                        </Card>
                                     ))}
-                                </tbody>
-                            </Table>
-                        </Card.Body>
-                    </Card>
+                                </div>
+                                <p><strong>Total Market Value:</strong> {formatNumber(combination.totalMarketValue)}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             )}
         </div>

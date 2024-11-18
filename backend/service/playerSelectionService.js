@@ -1,63 +1,94 @@
-const getPlayersToSell = (players, balance, excludedPlayers) => {
-    // Filter out the excluded players
-    const filteredPlayers = players.filter(player => !excludedPlayers.includes(player.i));
+const getPlayersToSell = (players, balance, excludedPlayers, excludeStartingEleven) => {
+    const target = -balance;
 
-    // Group players by position
-    const goalkeepers = filteredPlayers.filter(player => player.pos === 1);
-    const defenders = filteredPlayers.filter(player => player.pos === 2);
-    const nonDefendersAndGoalkeepers = filteredPlayers.filter(player => player.pos !== 1 && player.pos !== 2);
-
-    // Sort players by market value (descending order)
-    const sortedPlayers = [...nonDefendersAndGoalkeepers].sort((a, b) => b.mv - a.mv);
-
-    // Function to check if the remaining squad meets the constraints
-    const isValidSquad = (remainingPlayers) => {
-        const remainingGoalkeepers = remainingPlayers.filter(player => player.pos === 1);
-        const remainingDefenders = remainingPlayers.filter(player => player.pos === 2);
-        return remainingPlayers.length >= 11 && remainingGoalkeepers.length >= 1 && remainingDefenders.length >= 3;
-    };
-
-    let validCombinations = [];
-
-    // Use a more efficient approach to generate combinations
-    const generateCombinations = (arr, r) => {
-        const result = [];
-        const combination = (start, chosen) => {
-            if (chosen.length === r) {
-                result.push(chosen);
-                return;
-            }
-            for (let i = start; i < arr.length; i++) {
-                combination(i + 1, [...chosen, arr[i]]);
-            }
-        };
-        combination(0, []);
-        return result;
-    };
-
-    // Try combinations of players to sell, from 1 to max possible players
-    for (let r = 1; r <= sortedPlayers.length; r++) {
-        const combinations = generateCombinations(sortedPlayers, r);
-        for (const combo of combinations) {
-            const totalMarketValue = combo.reduce((total, player) => total + player.mv, 0);
-
-            // Only consider combinations that meet the balance condition
-            if (totalMarketValue >= -balance) {
-                // Get the remaining players after selling the selected combo
-                const remainingPlayers = filteredPlayers.filter(player => !combo.includes(player));
-
-                // Check if the remaining squad is valid (at least 1 goalkeeper, 3 defenders, and 11 players)
-                if (isValidSquad(remainingPlayers)) {
-                    validCombinations.push({ combo, totalMarketValue });
-                }
-            }
+    // Step 1: Exclude starting eleven and user-specified players
+    const validPlayers = players.filter(player => {
+        if (excludeStartingEleven && typeof player.lo === 'number') {
+            return false; // Exclude players in the starting eleven
         }
+        if (excludedPlayers.includes(player.i)) {
+            return false; // Exclude user-specified players
+        }
+        return true;
+    });
+
+    // Group 500k players separately
+    const players500k = validPlayers.filter(player => player.mv === 500000);
+    const otherPlayers = validPlayers.filter(player => player.mv !== 500000);
+    const max500kCount = players500k.length;
+
+    // Step 2: Validate squad constraints
+    const isValidSquad = (remainingPlayers) => {
+        const goalkeepers = remainingPlayers.filter(player => player.pos === 1).length;
+        const defenders = remainingPlayers.filter(player => player.pos === 2).length;
+        return remainingPlayers.length >= 11 && goalkeepers >= 1 && defenders >= 3;
+    };
+
+    // Check if the total market value is already insufficient
+    const totalMarketValue = otherPlayers.reduce((sum, player) => sum + player.mv, 0) + (max500kCount * 500000);
+    if (totalMarketValue < target) {
+        return {
+            error: 'Excluded too many players. The total market value of remaining players is insufficient.',
+        };
     }
 
-    // Sort the valid combinations by total market value and get the top 5 closest to the required balance
-    validCombinations = validCombinations.sort((a, b) => a.totalMarketValue - b.totalMarketValue).slice(0, 5);
+    // Step 3: Find valid combinations
+    const validCombinations = new Map(); // Use a Map to track unique combinations by IDs
+    const findCombination = (index, currentCombo, currentSum, current500kCount) => {
+        // Dynamically filter remaining players
+        const filteredRemainingPlayers = validPlayers.filter(player => !currentCombo.includes(player));
 
-    return { playersToSell: validCombinations };
+        // Stop if the total market value is sufficient
+        if (currentSum + (current500kCount * 500000) >= target) {
+            if (isValidSquad(filteredRemainingPlayers)) {
+                const playersToInclude = [...currentCombo];
+                const additional500kNeeded = Math.ceil((target - currentSum) / 500000);
+
+                // Add only the required number of 500k players
+                if (additional500kNeeded > 0) {
+                    playersToInclude.push(...players500k.slice(0, Math.min(additional500kNeeded, current500kCount)));
+                }
+
+                // Create a unique key based on player IDs
+                const combinationKey = playersToInclude.map(player => player.i).sort().join(',');
+
+                // Add combination if it's unique
+                if (!validCombinations.has(combinationKey)) {
+                    validCombinations.set(combinationKey, {
+                        combo: playersToInclude,
+                        totalMarketValue: currentSum + Math.min(additional500kNeeded, current500kCount) * 500000,
+                    });
+                }
+            }
+            return;
+        }
+
+        for (let i = index; i < filteredRemainingPlayers.length; i++) {
+            findCombination(
+                i + 1,
+                [...currentCombo, filteredRemainingPlayers[i]],
+                currentSum + filteredRemainingPlayers[i].mv,
+                current500kCount
+            );
+        }
+    };
+
+    findCombination(0, [], 0, max500kCount);
+
+    // Convert Map values to an array
+    const uniqueCombinations = Array.from(validCombinations.values());
+
+    // Sort by total market value, closest to the balance
+    uniqueCombinations.sort((a, b) => a.totalMarketValue - b.totalMarketValue);
+
+    // Return the top 5 combinations
+    if (uniqueCombinations.length === 0) {
+        return {
+            error: 'No valid combinations found. Even the nearest combination does not meet the balance requirement.',
+        };
+    }
+
+    return { playersToSell: uniqueCombinations.slice(0, 5) };
 };
 
 module.exports = { getPlayersToSell };
