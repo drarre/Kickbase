@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Dashboard.css'; // Include a CSS file for custom styling
-import { Dropdown, DropdownButton, Card, Row, Col } from 'react-bootstrap'; 
+import { Dropdown, DropdownButton, Card, Row, Col } from 'react-bootstrap';
 import apiClient from './api/apiClient';
 
 const api_url = process.env.REACT_APP_API_URL;
@@ -12,8 +12,8 @@ function Dashboard() {
     const [balance, setBalance] = useState(0);
     const [totalValue, setTotalValue] = useState(0);
     const [dailyChange, setDailyChange] = useState(0);
-    const [sortBy, setSortBy] = useState("mv");  // Default sort by Market Value
-    const [sortOrder, setSortOrder] = useState("desc");  // Default sort order (descending)
+    const [playersToSell, setPlayersToSell] = useState([]);
+    const [totalSellMarketValue, setTotalSellMarketValue] = useState(0);
 
     // Fetch leagues when component mounts
     useEffect(() => {
@@ -51,6 +51,8 @@ function Dashboard() {
             setBalance(league.b);
             setTotalValue(league.tv);
             fetchSquad(leagueId);
+            setPlayersToSell([]);
+            setTotalSellMarketValue(0);
         }
     };
 
@@ -75,33 +77,20 @@ function Dashboard() {
         return num ? num.toLocaleString() : 0;
     };
 
-    // Sorting handler
-    const handleSortChange = (criteria) => {
-        if (criteria === sortBy) {
-            // If the user selects the same sort criteria, toggle the order
-            setSortOrder(prevOrder => prevOrder === "asc" ? "desc" : "asc");
+    // Add or remove players from the list of players to sell
+    const handlePlayerSellToggle = (player, isChecked) => {
+        if (isChecked) {
+            setPlayersToSell(prev => [...prev, player]);
         } else {
-            // If the user selects a new sort criteria, set to descending order
-            setSortBy(criteria);
-            setSortOrder("desc");
+            setPlayersToSell(prev => prev.filter(p => p.i !== player.i));
         }
     };
 
-    // Sort the squad data based on the selected criteria and order
-    const sortedSquad = [...squad].sort((a, b) => {
-        let aValue = a[sortBy];
-        let bValue = b[sortBy];
-
-        // Ensure sorting of numerical values (Market Value, Profit, etc.)
-        aValue = parseFloat(aValue);
-        bValue = parseFloat(bValue);
-
-        if (sortOrder === "asc") {
-            return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
-        } else {
-            return aValue < bValue ? 1 : aValue > bValue ? -1 : 0;
-        }
-    });
+    // Recalculate the total market value of selected players
+    useEffect(() => {
+        const totalValue = playersToSell.reduce((sum, player) => sum + player.mv, 0);
+        setTotalSellMarketValue(totalValue);
+    }, [playersToSell]);
 
     return (
         <div className="dashboard">
@@ -141,33 +130,13 @@ function Dashboard() {
                     </Card.Body>
                 </Card>
             )}
-            
-            {/* Filter Dropdown (Only visible after selecting a league) */}
-            {selectedLeague && (
-                <div className="mb-3">
-                    <DropdownButton
-                        id="sort-dropdown"
-                        title={`Sort by ${sortBy === 'mv' ? 'Market Value' : sortBy === 'tfhmvt' ? '24h Change' : sortBy === 'mvgl' ? 'Profit' : sortBy === 'p' ? 'Points' : 'Average Points'}`}
-                        variant="secondary"
-                        onSelect={handleSortChange}
-                        className="w-100"
-                    >
-                        <Dropdown.Item eventKey="mv">Market Value</Dropdown.Item>
-                        <Dropdown.Item eventKey="tfhmvt">24h Change</Dropdown.Item>
-                        <Dropdown.Item eventKey="mvgl">Profit</Dropdown.Item>
-                        <Dropdown.Item eventKey="p">Points</Dropdown.Item>
-                        <Dropdown.Item eventKey="ap">Average Points</Dropdown.Item>
-                    </DropdownButton>
-                </div>
-            )}
 
             {/* Squad Cards */}
             <div className="squad-cards">
                 <Row xs={1} sm={2} md={3} lg={4} className="g-4">
-                    {sortedSquad.map(player => (
+                    {squad.map(player => (
                         <Col key={player.i}>
                             <Card className="squad-card">
-                                {/* Player Image */}
                                 <div className="squad-card-img">
                                     <Card.Img variant="top" src={player.imageUrl} alt={`${player.n} image`} />
                                 </div>
@@ -190,11 +159,29 @@ function Dashboard() {
                                             <p>{formatNumber(player.ap)}</p>
                                         </Col>
                                     </Row>
+                                    {/* Checkbox for marking players to sell */}
+                                    <div className="form-check">
+                                        <input
+                                            type="checkbox"
+                                            className="form-check-input"
+                                            id={`sell-${player.i}`}
+                                            checked={playersToSell.some(p => p.i === player.i)}
+                                            onChange={(e) => handlePlayerSellToggle(player, e.target.checked)}
+                                        />
+                                        <label className="form-check-label" htmlFor={`sell-${player.i}`}>
+                                            Mark for Sale
+                                        </label>
+                                    </div>
                                 </Card.Body>
                             </Card>
                         </Col>
                     ))}
                 </Row>
+            </div>
+
+            {/* Market Value Calculator Overlay */}
+            <div className="market-value-overlay">
+                <h4>Total Market Value of Selected Players: <strong>{formatNumber(totalSellMarketValue)}</strong></h4>
             </div>
         </div>
     );
