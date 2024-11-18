@@ -14,6 +14,8 @@ function Dashboard() {
     const [dailyChange, setDailyChange] = useState(0);
     const [playersToSell, setPlayersToSell] = useState([]);
     const [totalSellMarketValue, setTotalSellMarketValue] = useState(0);
+    const [sortBy, setSortBy] = useState("mv"); // Default sort by Market Value
+    const [sortOrder, setSortOrder] = useState("desc"); // Default sort order (descending)
 
     // Fetch leagues when component mounts
     useEffect(() => {
@@ -47,7 +49,7 @@ function Dashboard() {
         const league = leagues.find(l => l.i === leagueId);
 
         if (league) {
-            setSelectedLeague(leagueId);
+            setSelectedLeague(league);
             setBalance(league.b);
             setTotalValue(league.tv);
             fetchSquad(leagueId);
@@ -92,6 +94,34 @@ function Dashboard() {
         setTotalSellMarketValue(totalValue);
     }, [playersToSell]);
 
+    // Sorting handler
+    const handleSortChange = (criteria) => {
+        if (criteria === sortBy) {
+            // Toggle sort order if the same criteria is selected
+            setSortOrder(prevOrder => prevOrder === "asc" ? "desc" : "asc");
+        } else {
+            // Set new criteria and default to descending order
+            setSortBy(criteria);
+            setSortOrder("desc");
+        }
+    };
+
+    // Sort the squad data based on selected criteria and order
+    const sortedSquad = [...squad].sort((a, b) => {
+        let aValue = a[sortBy];
+        let bValue = b[sortBy];
+
+        // Ensure sorting of numerical values
+        aValue = parseFloat(aValue);
+        bValue = parseFloat(bValue);
+
+        if (sortOrder === "asc") {
+            return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
+        } else {
+            return aValue < bValue ? 1 : aValue > bValue ? -1 : 0;
+        }
+    });
+
     return (
         <div className="dashboard">
             <h2>Dashboard</h2>
@@ -100,7 +130,7 @@ function Dashboard() {
             <div className="mb-3">
                 <DropdownButton
                     id="league-selector"
-                    title={selectedLeague ? `Selected League: ${selectedLeague}` : 'Select League'}
+                    title={selectedLeague ? `Selected League: ${selectedLeague.n}` : 'Select League'}
                     variant="primary"
                     onSelect={handleLeagueChange}
                     className="w-100"
@@ -131,10 +161,29 @@ function Dashboard() {
                 </Card>
             )}
 
+            {/* Sorting Dropdown */}
+            {selectedLeague && (
+                <div className="mb-3">
+                    <DropdownButton
+                        id="sort-dropdown"
+                        title={`Sort by ${sortBy === 'mv' ? 'Market Value' : sortBy === 'tfhmvt' ? '24h Change' : sortBy === 'mvgl' ? 'Profit' : sortBy === 'p' ? 'Points' : 'Average Points'}`}
+                        variant="secondary"
+                        onSelect={handleSortChange}
+                        className="w-100"
+                    >
+                        <Dropdown.Item eventKey="mv">Market Value</Dropdown.Item>
+                        <Dropdown.Item eventKey="tfhmvt">24h Change</Dropdown.Item>
+                        <Dropdown.Item eventKey="mvgl">Profit</Dropdown.Item>
+                        <Dropdown.Item eventKey="p">Points</Dropdown.Item>
+                        <Dropdown.Item eventKey="ap">Average Points</Dropdown.Item>
+                    </DropdownButton>
+                </div>
+            )}
+
             {/* Squad Cards */}
             <div className="squad-cards">
                 <Row xs={1} sm={2} md={3} lg={4} className="g-4">
-                    {squad.map(player => (
+                    {sortedSquad.map(player => (
                         <Col key={player.i}>
                             <Card className="squad-card">
                                 <div className="squad-card-img">
